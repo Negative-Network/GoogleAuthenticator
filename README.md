@@ -44,7 +44,7 @@ take things a step further and make a bash alias which pipes the output
 directly into the clipboard. On OSX pbcopy can be used, on linux xsel 
 will do the trick.
 
-OSX example (put the following in ~/.bash_profile:
+OSX example - put the following in ~/.bash_profile:
 
     alias getcode="get-code ~/.google_authenticator | pbcopy"
 
