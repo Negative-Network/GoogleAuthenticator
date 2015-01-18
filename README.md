@@ -25,6 +25,29 @@ See example files
     Checking Code '848634' and Secret 'OQB6ZZGYHCPSX4AK':
     OK
 
+Usage: bin/get-code.php 
+-----------------------
+
+If you use 2-factor-auth for ssh'ing into servers, you know it can be 
+cumbersome copying codes from your mobile app to your terminal. 
+This script quickly calculates and prints your code. Simply put your 2FA 
+secret in a file, e.g. '~/.google_authenticator', then run the following command:
+
+    $ bin/get-code.php ~./google_authenticator
+
+To be able to execute the command anywhere, make a symlink in one of your $PATH directories to the script:
+
+    $ ln -s /foo/bar/GoogleAuthenticator/bin/get-code.php ~/bin/get-code
+
+Since most likely you don't need to see the code, but rather copy it, 
+take things a step further and make a bash alias which pipes the output
+directly into the clipboard. On OSX pbcopy can be used, on linux xsel 
+will do the trick.
+
+OSX example (put the following in ~/.bash_profile:
+
+    alias getcode="get-code ~/.google_authenticator | pbcopy"
+
 
 ToDo:
 -----
