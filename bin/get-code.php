@@ -1,7 +1,7 @@
 #! /usr/bin/php
 <?php
 
-require_once dirname(__FILE__).'/../PHPGangsta/GoogleAuthenticator.php';
+require_once dirname(__FILE__).'/../src/GoogleAuthenticator.php';
 
 /**
  * Script calculates a Google Authenticator code 
@@ -23,7 +23,7 @@ $f = fopen($secretFile, 'r');
 $secret = trim(fgets($f));
 fclose($f);
 
-$ga = new PHPGangsta_GoogleAuthenticator();
+$ga = new GoogleAuthenticator();
 
 $token = $ga->getCode($secret);
 

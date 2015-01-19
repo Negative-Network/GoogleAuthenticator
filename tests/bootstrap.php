@@ -1,3 +1,3 @@
 <?php
 
-require_once 'PHPGangsta/GoogleAuthenticator.php';
+require_once 'src/GoogleAuthenticator.php';

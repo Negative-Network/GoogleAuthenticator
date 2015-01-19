@@ -9,7 +9,7 @@
  * @link http://www.phpgangsta.de/
  */
 
-class PHPGangsta_GoogleAuthenticator
+class GoogleAuthenticator
 {
     protected $_codeLength = 6;
 
@@ -104,7 +104,7 @@ class PHPGangsta_GoogleAuthenticator
      * Set the code length, should be >=6
      *
      * @param int $length
-     * @return PHPGangsta_GoogleAuthenticator
+     * @return GoogleAuthenticator
      */
     public function setCodeLength($length)
     {

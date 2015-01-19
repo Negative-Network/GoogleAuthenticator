@@ -1,58 +1,62 @@
-Google Authenticator PHP class
-=====================
+# Google Authenticator in PHP
 
-* Copyright (c) 2012, [http://www.phpgangsta.de](http://www.phpgangsta.de)
-* Author: Michael Kliewe, [@PHPGangsta](http://twitter.com/PHPGangsta)
-* Licensed under the BSD License.
+This PHP class, created by Michael Kliewe [@PHPGangsta](http://twitter.com/PHPGangsta),
+can be used to interact with Google Authenticator.
 
-[![Build Status](https://travis-ci.org/PHPGangsta/GoogleAuthenticator.png?branch=master)](https://travis-ci.org/PHPGangsta/GoogleAuthenticator)
+Example Usage:
 
-This PHP class can be used to interact with the Google Authenticator mobile app for 2-factor-authentication. This class
-can generate secrets, generate codes, validate codes and present a QR-Code for scanning the secret.
+```php
+<?php
 
-For a secret installation you have to make sure that used codes cannot be reused (replay-attack).
+$ga = new GoogleAuthenticator();
 
-Usage:
-------
+$secret = $ga->createSecret();
+echo "Secret is: ".$secret."\n\n";
 
-See example files
+$qrCodeUrl = $ga->getQRCodeGoogleUrl('Blog', $secret);
+echo "Google Charts URL for the QR-Code: ".$qrCodeUrl."\n\n";
 
-    php example1.php
-    Secret is: OQB6ZZGYHCPSX4AK
+$code = $ga->getCode($secret);
+echo "Checking Code '$oneCode' and Secret '$secret':\n";
 
-    Google Charts URL for the QR-Code: https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth://totp/infoATphpgangsta.de%3Fsecret%3DOQB6ZZGYHCPSX4AK
+$checkResult = $ga->verifyCode($secret, $oneCode, 2);    // 2 = 2*30sec clock tolerance
+if ($checkResult) {
+    echo 'OK';
+} else {
+    echo 'FAILED';
+}
+```
 
-    Checking Code '848634' and Secret 'OQB6ZZGYHCPSX4AK':
-    OK
+## get-code Executable
 
-Usage: bin/get-code.php 
------------------------
+This script is useful for developers who use 2-factor-auth for signing
+into servers. Rather than copying codes from your mobile phone app, you can 
+execute a quick command in the terminal to get the current code.
 
-If you use 2-factor-auth for ssh'ing into servers, you know it can be 
-cumbersome copying codes from your mobile app to your terminal. 
-This script quickly calculates and prints your code. Simply put your 2FA 
-secret in a file, e.g. '~/.google_authenticator', then run the following command:
+Simply put your 2FA secret in a file, e.g. '~/.google_authenticator', then run the following command:
 
-    $ bin/get-code.php ~./google_authenticator
+```
+$ /path/to/GoogleAuthenticator/bin/get-code.php ~./google_authenticator
+> 102986
+```
 
-To be able to execute the command anywhere, make a symlink in one of your $PATH directories to the script:
+For an even more convenient setup:
 
-    $ ln -s /foo/bar/GoogleAuthenticator/bin/get-code.php ~/bin/get-code
+1.  Make a symlink in one of your $PATH directories to the script so you can execute it anywhere:
 
-Since most likely you don't need to see the code, but rather copy it, 
-take things a step further and make a bash alias which pipes the output
-directly into the clipboard. On OSX pbcopy can be used, on linux xsel 
-will do the trick.
+```
+$ ln -s /path/to/GoogleAuthenticator/bin/get-code.php ~/bin/get-code
+```
 
-OSX example (put the following in ~/.bash_profile:
+2. Make a bash alias which pipes the output directly into the clipboard:
 
-    alias getcode="get-code ~/.google_authenticator | pbcopy"
+```
+# ~./bash_profile
 
+alias getcode="get-code ~/.google_authenticator | pbcopy"
+```
 
-ToDo:
------
-- ??? What do you need?
+Now just run `getcode` and the current 2FA code will be in your clipboard.
 
-Notes:
-------
-If you like this script or have some features to add: contact me, visit my blog, fork this project, send pull requests, you know how it works.
+**Note:** `pbcopy` is on OSX only. I believe on linux `xsel` will do the trick.
+
